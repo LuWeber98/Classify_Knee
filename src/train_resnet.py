@@ -28,6 +28,14 @@ optimizer = optim.Adam(
     weight_decay=0.0001
 )
 
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+    optimizer,
+    mode="min",
+    factor=0.5,
+    patience=3,
+    min_lr=1e-7
+)
+
 # Training settings
 NUM_EPOCHS = 30
 best_val_loss = float("inf")
@@ -102,6 +110,15 @@ for epoch in range(NUM_EPOCHS):
 
     val_loss /= val_total
     val_accuracy = val_correct / val_total
+
+    # -------------------------
+    # Update learning rate
+    # -------------------------
+    scheduler.step(val_loss)
+
+    # Optional: print current learning rate(s)
+    current_lrs = [group["lr"] for group in optimizer.param_groups]
+    print(f"Learning rate(s): {current_lrs}")
 
 
     # -------------------------

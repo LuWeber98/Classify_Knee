@@ -1,5 +1,3 @@
-
-import torch
 from torch.utils.data import DataLoader
 
 from dataset import KneeArthritisDataset
@@ -66,7 +64,6 @@ from preprocessing import (
 
 BATCH_SIZE = 32
 NUM_WORKERS = 0
-
 
 train_dataset_resnet = KneeArthritisDataset(
     csv_file="../Splits/train.csv",

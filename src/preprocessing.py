@@ -1,9 +1,36 @@
-
+import cv2
+import numpy as np
 from torchvision import transforms
 
 # ImageNet Normalization
 MEAN = [0.485, 0.456, 0.406]
 STD = [0.229, 0.224, 0.225]
+
+
+
+class CLAHETransform:
+    def __init__(self, clip_limit=2.0, tile_grid_size=(4, 4)):
+        self.clahe = cv2.createCLAHE(
+            clipLimit=clip_limit,
+            tileGridSize=tile_grid_size
+        )
+
+    def __call__(self, img):
+
+        # Convert PIL image to grayscale
+        img = np.array(img.convert("L"))
+
+        # Apply CLAHE
+        img = self.clahe.apply(img)
+
+        # Convert grayscale to RGB (3 channels)
+        img = cv2.cvtColor(
+            img,
+            cv2.COLOR_GRAY2RGB
+        )
+
+        # Convert back to PIL
+        return Image.fromarray(img)
 
 # Training: Augmentation + Normalization
 train_transform = transforms.Compose([
@@ -97,6 +124,12 @@ train_transform_resnet = transforms.Compose([
 
     ResizeWithPadding(224),
 
+    # CLAHE preprocessing
+    CLAHETransform(
+        clip_limit=2.0,
+        tile_grid_size=(4, 4)
+    ),
+
     transforms.ToTensor(),
     transforms.Normalize(MEAN, STD)
 ])
@@ -106,6 +139,12 @@ val_transform_resnet = transforms.Compose([
 
     ResizeWithPadding(224),
 
+    # CLAHE preprocessing
+    CLAHETransform(
+        clip_limit=2.0,
+        tile_grid_size=(4, 4)
+    ),
+
     transforms.ToTensor(),
     transforms.Normalize(MEAN, STD)
 ])
@@ -114,6 +153,12 @@ val_transform_resnet = transforms.Compose([
 test_transform_resnet = transforms.Compose([
 
     ResizeWithPadding(224),
+
+    # CLAHE preprocessing
+    CLAHETransform(
+        clip_limit=2.0,
+        tile_grid_size=(4, 4)
+    ),
 
     transforms.ToTensor(),
     transforms.Normalize(MEAN, STD)

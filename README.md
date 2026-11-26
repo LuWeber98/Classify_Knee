@@ -13,9 +13,11 @@ Workflow:
 2. Preprocess the images   
   Might apply a crop for the region of interest and CLAHE 
 3. Apply Transfer Learning  
-ResNet50 as starting point and fine tune as it provided best performance in the classification of osteoporosis in knee X-Rays: https://www.nature.com/articles/s41598-025-24338-4
+ResNet50 as starting point and fine tune as it provided best performance in the classification of osteoarthritis in knee X-Rays: https://www.nature.com/articles/s41598-025-24338-4
 4. Test and check the model performance against each other
 
   
 Current results:  
-Custom CNN: 
+Custom CNN:   
+  
+ResNet 50: best result so far: Epoch [29/30] Train Loss: 0.7002 Train Acc: 0.7584 Val Loss: 0.9298 Val Acc: 0.6356
